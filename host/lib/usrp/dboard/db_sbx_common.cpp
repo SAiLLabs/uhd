@@ -265,13 +265,15 @@ void sbx_xcvr::update_atr(void){
 
     //setup the tx atr (this does not change with antenna)
     this->get_iface()->set_atr_reg(dboard_iface::UNIT_TX, \
-            dboard_iface::ATR_REG_IDLE, 0 | tx_lo_lpf_en \
-            | tx_ld_led | tx_ant_led | TX_POWER_UP | ANT_XX | TX_MIXER_DIS);
+            dboard_iface::ATR_REG_IDLE, tx_pga0_iobits | tx_lo_lpf_en \
+            | tx_ld_led | tx_ant_led | TX_POWER_UP | TX_MIXER_ENB \
+            | ((_tx_ant == "CAL")? ANT_RX : ANT_TX));
 
     //setup the rx atr (this does not change with antenna)
     this->get_iface()->set_atr_reg(dboard_iface::UNIT_RX, \
             dboard_iface::ATR_REG_IDLE, rx_pga0_iobits | rx_lo_lpf_en \
-            | rx_ld_led | rx_ant_led | RX_POWER_UP | ANT_XX | RX_MIXER_DIS);
+            | rx_ld_led | rx_ant_led | RX_POWER_UP | RX_MIXER_ENB \
+            | ((_rx_ant == "CAL")? ANT_TXRX : ANT_RX2));
 
     //set the RX atr regs that change with antenna setting
     this->get_iface()->set_atr_reg(dboard_iface::UNIT_RX, \
